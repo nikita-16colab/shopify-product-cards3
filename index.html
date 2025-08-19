@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cards Shopify</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Анимация при наведении на изображение */
+        .card-image-container:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        /* Styles for the image gallery */
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Ensures a square container */
+            overflow: hidden;
+            border-radius: 1.5rem; /* rounded-3xl from Tailwind */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+        }
+
+        .gallery-wrapper {
+            display: flex;
+            width: 200%; /* Two slides, so 200% */
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .gallery-slide {
+            flex-shrink: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Основной контейнер карточки. -->
+    <div class="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105">
+        
+        <!-- Контейнер для изображения с эффектом приближения при наведении -->
+        <div class="relative w-full overflow-hidden gallery-container">
+            <div id="gallery-wrapper" class="gallery-wrapper">
+                <!-- Slide 1: Infographics Image -->
+                <div class="gallery-slide">
+                    <img class="w-full h-full object-cover" 
+                         src="img/Untitled.png" 
+                         alt="Инфографика продукта">
+                </div>
+
+                <!-- Slide 2: AI-Powered Video -->
+                <div class="gallery-slide">
+                    <video controls class="w-full h-full object-cover">
+                        <!-- Замените этот URL на ваш реальный видеофайл -->
+                        <source src="img/video_2025-08-19_11-18-49.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="absolute top-1/2 left-4 transform -translate-y-1/2 cursor-pointer bg-black bg-opacity-50 text-white rounded-full p-2" onclick="prevSlide()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </div>
+            <div class="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer bg-black bg-opacity-50 text-white rounded-full p-2" onclick="nextSlide()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+            
+            <!-- Dots for navigation -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <span id="dot1" class="w-2 h-2 rounded-full bg-white transition-colors duration-300"></span>
+                <span id="dot2" class="w-2 h-2 rounded-full bg-gray-400 transition-colors duration-300"></span>
+            </div>
+        </div>
+        <!-- Контейнер для текста и деталей -->
+        <div class="p-6 text-center">
+            <!-- Название товара -->
+            <h3 class="font-bold text-xl text-gray-800 mb-2 truncate">
+                Wireless Handheld Vacuum Cleaner XIAOMI Lydsto 10000PA
+            </h3>
+              <!-- Лейбл "Новинка" -->
+            <div class="absolute top-4 right-4 bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                New
+            </div>
+        
+            <!-- Описание товара. -->
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+            A multifunctional gadget for home and car with a digital display that can also be used as a tire inflation compressor.
+            </p>
+            
+            <!-- Цена и кнопка -->
+            <div class="flex items-center justify-between mt-4">
+                <!-- Цена -->
+                <span class="font-bold text-2xl text-gray-900">
+                    105.99 €
+                </span>
+                
+                <!-- Кнопка "Добавить в корзину" -->
+                <button class="bg-green-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                    Buy
+                </button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        const galleryWrapper = document.getElementById('gallery-wrapper');
+        const dots = [document.getElementById('dot1'), document.getElementById('dot2')];
+        let currentSlide = 0;
+        const totalSlides = 2;
+
+        function updateGallery() {
+            galleryWrapper.style.transform = `translateX(-${currentSlide * 50}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.remove('bg-white');
+                dot.classList.add('bg-gray-400');
+                if (index === currentSlide) {
+                    dot.classList.remove('bg-gray-400');
+                    dot.classList.add('bg-white');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateGallery();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateGallery();
+        }
+
+        // Optional: Auto-play the video when the slide is active
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target.querySelector('video');
+                if (video) {
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% of the video is visible
+
+        // Observe the video slide
+        const videoSlide = document.getElementById('gallery-wrapper').children[1];
+        if (videoSlide) {
+            observer.observe(videoSlide);
+        }
+    </script>
+
+</body>
+</html>
